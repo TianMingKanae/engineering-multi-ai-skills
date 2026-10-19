@@ -1,8 +1,75 @@
 # engineering-multi-ai-skills
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
+```mermaid
+flowchart LR
+    O["Coordinator (O)"] --> P["Proposer (P)"]
+    P --> I["Implementer (I)"]
+    O -->|Small task| I
+    I --> C["Critic (C)"]
+    C -->|Corrections| I
+    C --> V["Verifier (V)"]
+    V -->|Evidence| O
+    I -.->|Bounded command| W["Worker (W)"]
+    W -.->|Artifacts| I
+```
+
 Use one agent for ordinary work. Add separate implementers, reviewers or verifiers when independent work will resolve a concrete uncertainty. A skill does not create agents or grant permissions: use delegation and tool access already authorized in your environment.
+
+## 3-Minute Quickstart
+
+**You need:** Git, Python 3.10+ and an AI coding assistant that can read local files. No API key or multi-agent runner configuration is needed for this walkthrough.
+
+### 1. Clone and preview your first thread
+
+Run these commands in a terminal:
+
+```shell
+git clone https://github.com/TianMingKanae/engineering-multi-ai-skills.git
+cd engineering-multi-ai-skills
+python scripts/dispatch.py --root examples/quickstart/project --role I
+```
+
+Expected output:
+
+```text
+PENDING context/discuss/normalize-label.md
+```
+
+The [sample project](examples/quickstart/project/) contains a small label-normalization bug, acceptance tests and an assigned thread. Preview reads that assignment without starting a model or writing state.
+
+### 2. Say this to your AI
+
+Open your coding assistant in the cloned repository and paste:
+
+```text
+Act as the implementer (I) for the quickstart only.
+Read skills/engineering-plan/SKILL.md, skills/worker-task/SKILL.md,
+examples/quickstart/project/AGENTS.md, and
+examples/quickstart/project/context/discuss/normalize-label.md.
+Fix the assigned bug in examples/quickstart/project/labels.py.
+Run the supplied tests without changing their expectations.
+Append an I entry with the command and observed result to the thread,
+then set its frontmatter owner to C. Do not start other agents.
+```
+
+This loads the relevant skills explicitly; you can install them in your host's skill directory later.
+
+### 3. Check the result
+
+Back in your terminal:
+
+```shell
+python -m unittest discover -s examples/quickstart/project -v
+python scripts/dispatch.py --root examples/quickstart/project --role C
+```
+
+After the fix, expect **4 passing tests** and `PENDING context/discuss/normalize-label.md` for C. The tests intentionally fail before the fix. You have now completed a bounded task and handed off evidence through a real thread.
+
+For independent review, open a fresh assistant session and say: "Act as C. Read skills/critic-review/SKILL.md and the quickstart thread, inspect the patch and rerun its tests. Append your findings; if acceptance criteria pass, set status to resolved and owner to O." Changing role in the implementer's existing session does not provide independent verification.
 
 ## Skills
 
@@ -82,3 +149,7 @@ python -m unittest discover -s tests -v
 ```
 
 Tests use local subprocesses and temporary projects, with no paid model calls or external services.
+
+## License
+
+Released under the [MIT License](LICENSE).
