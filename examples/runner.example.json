@@ -1,0 +1,5 @@
+{
+  "command": ["your-agent-cli", "{prompt}"],
+  "timeout_seconds": 900,
+  "max_attempts": 2
+}

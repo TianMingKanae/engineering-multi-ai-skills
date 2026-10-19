@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+*.log
+*.flag
+__pycache__/
+.multi-ai/
+runner.local.json
