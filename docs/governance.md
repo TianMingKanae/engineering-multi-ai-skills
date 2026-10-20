@@ -2,6 +2,8 @@
 
 The optional governed profile adds explicit human authority, milestone review and node-aware handoffs to the basic workflow. All examples are synthetic. The profile describes reusable mechanisms, not a measured performance claim or a production security boundary.
 
+Introduced in toolkit v0.2.0; see the [changelog and upgrade notes](../CHANGELOG.md).
+
 ```mermaid
 flowchart TD
     H["H: human scope and budget"] --> O["O: coordinator"]

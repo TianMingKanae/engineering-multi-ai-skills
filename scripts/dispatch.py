@@ -212,6 +212,8 @@ def dispatch_pass(root: Path, role: str, cfg: dict, folder: Path,
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    version = (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
+    parser.add_argument("--version", action="version", version=f"%(prog)s {version}")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--role", required=True)
     parser.add_argument("--config", type=Path)

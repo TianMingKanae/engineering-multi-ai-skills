@@ -24,6 +24,8 @@ def save(path: Path, result: dict) -> None:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
+    version = (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
+    p.add_argument("--version", action="version", version=f"%(prog)s {version}")
     p.add_argument("--root", type=Path, default=Path.cwd())
     p.add_argument("--id", required=True)
     p.add_argument("--timeout", type=int)
