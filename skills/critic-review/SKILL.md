@@ -5,6 +5,8 @@ description: Review an engineering design, code change or result against require
 
 Read requirements, patch and relevant outputs yourself. Review the actual revision being integrated. Another role's summary is not proof; do not edit unrelated code to manufacture a finding.
 
+Under Milestone Mode, batch reviews at Pilot Readout, Pre-Main Launch and CLAIMS Entry using one frozen evidence packet. Do not join routine computation or schedule hourly model reviews. H is the final project decision authority within host constraints: document a material objection once, then respect a trusted H decision. Distinguish an accepted risk/waiver from a passed test and never upgrade evidence merely because H chose to proceed. An unresolved scope/resource disagreement blocks to H through O. C reviews implementation; blind V must receive its minimal packet without that implementation.
+
 Apply relevant lenses:
 - Acceptance: does each required condition pass, including boundaries and failures?
 - Correctness: state transitions, concurrency, invariants, compatibility and data integrity.

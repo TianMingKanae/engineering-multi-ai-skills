@@ -6,18 +6,23 @@ Practical skills and a file-based workflow for engineering teams using multiple 
 
 ```mermaid
 flowchart LR
-    O["Coordinator (O)"] --> P["Proposer (P)"]
-    P --> I["Implementer (I)"]
-    O -->|Small task| I
-    I --> C["Critic (C)"]
-    C -->|Corrections| I
+    H["Human Principal (H)"] -->|Scope and budget| O["Coordinator (O)"]
+    O --> P["Researcher (P)"]
+    P --> F["Code Owner (F)"]
+    O -->|Implementation| F
+    F --> W["Worker (W)"]
+    W -->|Completion event| O
+    O --> G{"Review milestone"}
+    G --> C["Critic (C)"]
     C --> V["Verifier (V)"]
     V -->|Evidence| O
-    I -.->|Bounded command| W["Worker (W)"]
-    W -.->|Artifacts| I
+    O -->|Decision gate| H
+    O -.-> A["Auxiliary (A)"]
 ```
 
 Use one agent for ordinary work. Add separate implementers, reviewers or verifiers when independent work will resolve a concrete uncertainty. A skill does not create agents or grant permissions: use delegation and tool access already authorized in your environment.
+
+The diagram shows the optional **governed profile**: human decision gates, event-driven milestones, physical-node affinity and bounded worker repairs. The basic quickstart below uses I as a compatibility alias for F and needs no scheduler.
 
 ## 3-Minute Quickstart
 
@@ -80,6 +85,7 @@ For independent review, open a fresh assistant session and say: "Act as C. Read 
 | [critic-review](skills/critic-review/SKILL.md) | Review correctness, failure handling, security, performance and reported evidence. |
 | [worker-task](skills/worker-task/SKILL.md) | Execute a bounded assigned job, capture outputs and report reproducible failures. |
 | [claim-ledger](skills/claim-ledger/SKILL.md) | Keep engineering conclusions tied to evidence, status and limits. |
+| [engineering-governance](skills/engineering-governance/SKILL.md) | Apply H decision gates, milestone review, node migration, fix quotas and blind verification. |
 
 `skills/` holds the canonical copies. Copy selected folders into your agent's configured skill directory. For example, to install into a project's Claude skill directory:
 
@@ -97,14 +103,27 @@ Review existing same-named skills before copying. Other hosts can use the same S
 
 | Role | Owns |
 |---|---|
+| H — human principal | Final project scope, resource ceilings and trusted override decisions. |
 | O — coordinator | Scope, ownership, integration and user-facing updates. |
-| P — proposer | Options, research and design rationale, when needed. |
-| I — implementer | Code and focused tests. |
+| F — primary code owner | Production code and focused tests; I is the basic-mode alias. |
+| P — researcher | Sources, options and design rationale on a suitably entitled node. |
 | C — reviewer | Independent review of the patch and evidence. |
-| V — verifier | Independent reproduction of important outcomes. |
+| V — blind verifier | Independent scripts from raw artifacts and a separate specification. |
 | W — worker | Exact assigned commands and artifact collection. |
+| A — auxiliary | Explicit support work without production-code authority by default. |
 
-These are responsibilities, not mandatory sessions. Combine roles when independence is unnecessary. For important decisions, a useful flow is O → P/I → C → V → O; skip stages that add no evidence. Use separate clones or worktrees for concurrent writes and decide who integrates before starting.
+These are responsibilities, not mandatory sessions. Combine roles when independence is unnecessary. In basic mode, O → P/F → C → V → O is one possible flow. In the governed profile, O batches C/V work at Pilot Readout, Pre-Main Launch and CLAIMS Entry; routine jobs do not trigger repeated reviews. Only O/F own production changes, with a narrow recorded W mechanical-fix exception. Use isolated clones/worktrees for concurrent writes; blind V needs a separate minimal artifact packet, not a source-visible worktree.
+
+### Governance patterns and before/after
+
+| Concern | Before | Governed profile |
+|---|---|---|
+| Decision deadlock | Agents debate without a final owner | `owner: H`, blocked branch, trusted human release |
+| Idle model cost | Timed model wakeups and repeated micro-reviews | Completion/scheduler receipts; three batch review gates |
+| Wrong node / migration race | Assume tools and network access; resume twice | Capability preflight, target READY, single-writer lease, STARTED |
+| Role overreach / correlated checks | Unbounded worker repairs and shared solver logic | O/F production ownership, task-level fix quota, blind V packet |
+
+Read the [governance comparison and adoption guide](docs/governance.md) and the [four pattern modules](skills/engineering-governance/SKILL.md). H is the highest project authority within host constraints; a human waiver never changes the evidence. Token savings above 80% are a measurement target, not a demonstrated result of this repository.
 
 ### Example: duplicate webhook delivery
 
@@ -132,6 +151,8 @@ python scripts/dispatch.py --root C:\path\to\project --role I --config C:\path\t
 ```
 
 Add `--watch --poll-seconds 300` to poll local files. Arrange synchronization separately from an idle clone; never pull files underneath active jobs. `{prompt}` is substituted into one argument without shell evaluation. No CLI flags or model names are assumed. Each thread is dispatched once per successful input fingerprint; failures get at most `max_attempts` total attempts, with no retry in the same poll. A successful runner must append its role entry or hand the thread to another owner. State, logs and a per-role lock live in `.multi-ai/`. Only one dispatcher per role and project may run at once.
+
+For governed jobs, prefer a one-shot call from an authorized scheduler with `--mode milestone --node compute-node`. H cannot be dispatched in either mode. A thread with a `node` field is skipped without a matching `--node`. Milestone Mode requires a matching event receipt; C/V additionally require one of the three milestones and a scheduler receipt. See the [receipt schema and trigger contract](skills/engineering-governance/references/milestone-mode.md). File polling itself makes no idle model calls; these routing checks do not enforce file write ACLs, authenticate H or provide a distributed lease.
 
 ### Run an engineering command
 
