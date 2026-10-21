@@ -162,7 +162,11 @@ class RegistrationTest(unittest.TestCase):
     def test_git_checkout_line_endings_are_recorded_then_frozen(self):
         for path in (self.root / "examples/preregistration").iterdir():
             if path.suffix in {".py", ".json"}:
-                path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+                relative = path.relative_to(self.root).as_posix()
+                committed = subprocess.check_output(["git", "-C", str(self.root), "show", f"HEAD:{relative}"])
+                # Choose the opposite of the blob, not the checkout's Git-dependent format.
+                opposite = committed.replace(b"\r\n", b"\n") if b"\r\n" in committed else committed.replace(b"\n", b"\r\n")
+                path.write_bytes(opposite)
         receipt, anchor = registry.seal(self.root, "run-7", self.spec)
         record = json.loads(receipt.read_text())
         name = self.spec["evaluator"]

@@ -4,7 +4,9 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
-No unreleased changes.
+### Fixed
+
+- The preregistration line-ending regression test now writes the opposite of each committed Git blob's line endings, so both LF and CRLF source blobs exercise distinct working/Git hashes without changing text content.
 
 ## [0.3.0]
 
