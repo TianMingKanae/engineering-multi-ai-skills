@@ -1,9 +1,9 @@
 # engineering-multi-ai-skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version: 0.3.0](https://img.shields.io/badge/version-0.3.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.3.0)
+[![Version: 0.3.1](https://img.shields.io/badge/version-0.3.1-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.3.1)
 
-**v0.3.0 — Cross-provider collaboration, distributed tail planning and frozen evidence pipelines.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
+**v0.3.1 — Dispatcher thread-format compatibility, snapshot-checked plan apply and safer preregistration evaluation.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
 
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
