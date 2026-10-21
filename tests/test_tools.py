@@ -54,6 +54,27 @@ class ToolsTest(unittest.TestCase):
         self.write_thread(last="I")
         self.assertEqual([], dispatch.pending(self.root, "I"))
 
+    def test_short_timestamp_last_own_entry_is_not_pending(self):
+        self.thread.write_text("---\nstatus: open\nowner: I\n---\n# Task\n### O 10-21 13:10\ngo\n"
+                               "### I 10-21 13:20\ndone\n", encoding="utf-8")
+        self.assertEqual([], dispatch.pending(self.root, "I"))
+        self.thread.write_text("---\nstatus: open\nowner: I\n---\n# Task\n### O 10-21 13:10\ngo\n",
+                               encoding="utf-8")
+        self.assertEqual(1, len(dispatch.pending(self.root, "I")))
+
+    def test_multi_owner_thread_is_skipped_with_warning(self):
+        (self.root / "context/discuss/shared.md").write_text(
+            "---\nstatus: open\nowner: C, I\n---\n# Shared\n", encoding="utf-8")
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            found = dispatch.pending(self.root, "I")
+        self.assertEqual(["context/discuss/task.md"], [t.relative for t in found])
+        self.assertIn("shared.md", stderr.getvalue())
+        (self.root / "context/discuss/shared.md").write_text(
+            "---\nstatus: open\nowner: C; I\n---\n", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            dispatch.pending(self.root, "I")
+
     def test_duplicate_and_missing_routing_are_errors(self):
         for text in ("# no frontmatter", "---\nowner: I\n---\n", "---\nowner: I\nowner: C\nstatus: open\n---\n"):
             self.thread.write_text(text)
@@ -95,6 +116,12 @@ class ToolsTest(unittest.TestCase):
         self.assertEqual(1, len(self.state()))
         self.assertEqual("done", next(iter(self.state().values()))["status"])
         self.assertEqual("C", dispatch.read_thread(self.thread, self.root).owner)
+
+    def test_handoff_to_several_owners_counts_as_handoff(self):
+        code = ("from pathlib import Path; p=Path('context/discuss/task.md'); "
+                "p.write_text(p.read_text().replace('owner: I','owner: C, V'))")
+        self.assertFalse(self.run_pass(self.config(code)))
+        self.assertEqual("done", next(iter(self.state().values()))["status"])
 
     def test_role_lock_rejects_second_owner_and_releases(self):
         with dispatch.role_lock(self.root, "I"):
