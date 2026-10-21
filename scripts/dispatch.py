@@ -181,7 +181,11 @@ def dispatch_pass(root: Path, role: str, cfg: dict, folder: Path,
             print(f"EXHAUSTED {thread.relative}", file=sys.stderr, flush=True)
             failed = True
             continue
-        current = read_thread(thread.path, root)
+        try:
+            current = read_thread(thread.path, root)
+        except MultipleOwners as exc:
+            print(f"WARNING: {exc}", file=sys.stderr, flush=True)
+            continue
         if current != thread or not eligible(current, root, role, mode, node):
             print(f"CHANGED {thread.relative}; deferred", flush=True)
             continue

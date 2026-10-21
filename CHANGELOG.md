@@ -7,7 +7,7 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 ### Fixed
 
 - `dispatch.py` recognizes `### ROLE MM-DD HH:MM` entry headers as well as ISO timestamps, so a role that already wrote the last entry in that format is not dispatched again.
-- A thread with several owners (`owner: C, F`) is skipped with a warning instead of stopping dispatch for every thread; a runner that hands off to several owners counts as a handoff.
+- A thread with several owners (`owner: C, F`) is skipped with a warning instead of stopping dispatch for every thread, including when it changes during a pass; a runner that hands off to several owners counts as a handoff.
 - `rebalance.py --apply` now requires `--nodes` and checks the plan against that node snapshot, instead of trusting the topology stored in the plan file.
 - An interrupted `preregister.py evaluate` is recorded as `UNFINISHED`, not `PROVISIONAL`, so it cannot read as supporting evidence in the generated ledger.
 - The preregistration line-ending regression test now writes the opposite of each committed Git blob's line endings, so both LF and CRLF source blobs exercise distinct working/Git hashes without changing text content.

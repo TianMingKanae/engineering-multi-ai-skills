@@ -123,6 +123,19 @@ class ToolsTest(unittest.TestCase):
         self.assertFalse(self.run_pass(self.config(code)))
         self.assertEqual("done", next(iter(self.state().values()))["status"])
 
+    def test_thread_changed_to_several_owners_mid_pass_is_skipped(self):
+        first = self.root / "context/discuss/a-first.md"
+        first.write_text("---\nstatus: open\nowner: I\n---\n# First\n", encoding="utf-8")
+        code = ("from pathlib import Path; d=Path('context/discuss'); "
+                "a=d/'a-first.md'; a.write_text(a.read_text().replace('owner: I','owner: C')); "
+                "t=d/'task.md'; t.write_text(t.read_text().replace('owner: I','owner: C, I'))")
+        stderr = io.StringIO()
+        with dispatch.role_lock(self.root, "I") as folder:
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(stderr):
+                self.assertFalse(dispatch.dispatch_pass(self.root, "I", self.config(code), folder))
+        self.assertIn("task.md", stderr.getvalue())
+        self.assertEqual(["done"], [r["status"] for r in self.state().values()])
+
     def test_role_lock_rejects_second_owner_and_releases(self):
         with dispatch.role_lock(self.root, "I"):
             with self.assertRaises(ValueError):
