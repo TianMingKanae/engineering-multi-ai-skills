@@ -113,7 +113,7 @@ def evaluate(root, receipt_path, expected_receipt_sha):
         raise ValueError("Receipt does not match the trusted pre-run anchor")
     registration = json.loads(receipt_path.read_text(encoding="utf-8"))
     identity, spec = registration["id"], registration["spec"]
-    record = dict(id=identity, status="PROVISIONAL", passed=None, receipt_sha256=expected_receipt_sha,
+    record = dict(id=identity, status="UNFINISHED", passed=None, receipt_sha256=expected_receipt_sha,
                   input_revision=registration["revision"], reason="evaluation reserved; unfinished is not a pass")
     conn = database(root)
     try:

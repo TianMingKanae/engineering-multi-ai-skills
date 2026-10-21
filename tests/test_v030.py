@@ -70,12 +70,29 @@ class PlannerTest(unittest.TestCase):
             forged = json.loads(json.dumps(plan))
             forged["assignments"].append(forged["assignments"][0])
             with self.assertRaises(ValueError):
-                schedule.apply(path, forged)
-            result = schedule.apply(path, plan)
+                schedule.apply(path, forged, self.nodes())
+            result = schedule.apply(path, plan, self.nodes())
             self.assertEqual([0, 1], [t["seed"] for t in result["tasks"]])
             self.assertTrue(all(t["status"] == "assigned" for t in result["tasks"]))
             with self.assertRaises(ValueError):
-                schedule.apply(path, plan)
+                schedule.apply(path, plan, self.nodes())
+
+    def test_apply_uses_supplied_nodes_not_plan_topology(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "state.json"
+            state = self.state(2)
+            path.write_text(json.dumps(state))
+            nodes = self.nodes()
+            nodes["nodes"][0]["free_slots"] = 1
+            inflated = json.loads(json.dumps(nodes))
+            inflated["nodes"][0]["free_slots"] = 99
+            forged = schedule.plan(state, inflated)
+            self.assertEqual([0, 0], [a["wave"] for a in forged["assignments"]])
+            with self.assertRaises(ValueError):
+                schedule.apply(path, forged, nodes)
+            self.assertEqual(state, json.loads(path.read_text()))
+            result = schedule.apply(path, schedule.plan(state, nodes), nodes)
+            self.assertEqual([0, 1], [t["wave"] for t in result["tasks"]])
 
     def test_duplicate_units_and_invalid_capacity_rejected(self):
         state = self.state(1)
@@ -131,6 +148,27 @@ class RegistrationTest(unittest.TestCase):
         receipt, anchor = registry.seal(self.root, "run-2", self.spec)
         self.artifact(0)
         self.assertEqual("PROVISIONAL", registry.evaluate(self.root, receipt, anchor)["status"])
+
+    def test_interrupted_evaluation_is_unfinished_not_provisional(self):
+        receipt, anchor = registry.seal(self.root, "run-8", self.spec)
+        self.artifact(0)
+        original = registry.git
+
+        def crash(*args):
+            raise SystemExit("simulated crash after reservation")
+        registry.git = crash
+        try:
+            with self.assertRaises(SystemExit):
+                registry.evaluate(self.root, receipt, anchor)
+        finally:
+            registry.git = original
+        with self.assertRaises(ValueError):
+            registry.evaluate(self.root, receipt, anchor)
+        with closing(sqlite3.connect(self.root / "context/CLAIMS.sqlite")) as db:
+            registry.export_ledger(self.root, db)
+        ledger = (self.root / "context/CLAIMS.generated.md").read_text()
+        self.assertIn("| run-8 | UNFINISHED | None |", ledger)
+        self.assertNotIn("PROVISIONAL", ledger)
 
     def test_existing_result_or_uncommitted_contract_cannot_be_sealed(self):
         self.artifact(1)

@@ -72,15 +72,18 @@ def plan(state, topology):
     return result
 
 
-def apply(state_path, proposed):
+def apply(state_path, proposed, topology):
     state_path = Path(state_path)
     lock = state_path.with_name(state_path.name + ".lock")
     fd = os.open(lock, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     try:
         os.close(fd)
         state = json.loads(state_path.read_text(encoding="utf-8"))
+        # The node snapshot comes from the reviewed nodes file, never from the plan itself.
+        if digest(topology) != proposed.get("topology_hash"):
+            raise ValueError("Plan was not made from this node snapshot; refresh nodes and plan again")
         # Recompute the entire plan, not just attacker-controlled summary hashes.
-        expected = plan(state, proposed["topology"])
+        expected = plan(state, topology)
         if proposed != expected:
             raise ValueError("Stale or modified plan; refresh state/topology and review again")
         by_id = {x["task_id"]: x for x in proposed["assignments"]}
@@ -105,9 +108,10 @@ def main():
     args = p.parse_args()
     try:
         if args.apply:
-            if args.nodes or args.out:
-                p.error("apply does not accept nodes/out")
-            apply(args.state, json.loads(args.apply.read_text(encoding="utf-8")))
+            if args.out or not args.nodes:
+                p.error("apply requires nodes and does not accept out")
+            apply(args.state, json.loads(args.apply.read_text(encoding="utf-8")),
+                  json.loads(args.nodes.read_text(encoding="utf-8")))
             print("APPLIED: assignments recorded; leases/start acknowledgments remain required")
         else:
             if not args.nodes or not args.out:

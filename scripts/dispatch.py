@@ -17,6 +17,10 @@ ROLE = re.compile(r"[A-Za-z][A-Za-z0-9_-]*\Z")
 MILESTONES = {"pilot-readout", "pre-main-launch", "claims-entry"}
 
 
+class MultipleOwners(ValueError):
+    """A thread names several valid roles; it is skipped rather than stopping every dispatch."""
+
+
 @dataclass(frozen=True)
 class Thread:
     path: Path
@@ -55,6 +59,10 @@ def read_thread(path: Path, root: Path) -> Thread:
     if not fields.get("owner") or not fields.get("status"):
         raise ValueError(f"Missing owner/status: {path.name}")
     if not ROLE.fullmatch(fields["owner"]):
+        parts = [x.strip() for x in fields["owner"].split(",")]
+        if len(parts) > 1 and all(ROLE.fullmatch(x) for x in parts):
+            raise MultipleOwners(f"Owner must be one role; skipped {path.relative_to(root).as_posix()} "
+                                 f"(owner: {fields['owner']})")
         raise ValueError(f"Owner must be one role: {path.name}")
     if fields["status"] not in {"open", "closed", "resolved", "blocked"}:
         raise ValueError(f"Unknown status: {path.name}")
@@ -62,7 +70,8 @@ def read_thread(path: Path, root: Path) -> Thread:
         raise ValueError(f"Unknown milestone: {path.name}")
     if "node" in fields and not ROLE.fullmatch(fields["node"]):
         raise ValueError(f"Node must be one identifier: {path.name}")
-    headers = re.findall(r"^### ([A-Za-z][A-Za-z0-9_-]*)\s+\d{4}-\d{2}-\d{2}\S*.*$",
+    # Entry timestamps: ISO (YYYY-MM-DD...) or the short MM-DD HH:MM form.
+    headers = re.findall(r"^### ([A-Za-z][A-Za-z0-9_-]*)\s+(?:\d{4}-\d{2}-\d{2}\S*|\d{2}-\d{2}\s+\d{2}:\d{2}).*$",
                          "\n".join(lines[end + 1:]), re.MULTILINE)
     return Thread(path, path.relative_to(root).as_posix(), fields["owner"],
                   fields["status"], headers[-1] if headers else None,
@@ -106,7 +115,12 @@ def eligible(thread: Thread, root: Path, role: str, mode: str, node: str | None)
 
 def pending(root: Path, role: str, mode: str = "standard", node: str | None = None) -> list[Thread]:
     # Parse every candidate first: malformed routing cannot cause partial dispatch.
-    threads = [read_thread(p, root) for p in sorted((root / "context/discuss").glob("*.md"))]
+    threads = []
+    for path in sorted((root / "context/discuss").glob("*.md")):
+        try:
+            threads.append(read_thread(path, root))
+        except MultipleOwners as exc:
+            print(f"WARNING: {exc}", file=sys.stderr, flush=True)
     return [t for t in threads if eligible(t, root, role, mode, node)]
 
 
@@ -167,7 +181,11 @@ def dispatch_pass(root: Path, role: str, cfg: dict, folder: Path,
             print(f"EXHAUSTED {thread.relative}", file=sys.stderr, flush=True)
             failed = True
             continue
-        current = read_thread(thread.path, root)
+        try:
+            current = read_thread(thread.path, root)
+        except MultipleOwners as exc:
+            print(f"WARNING: {exc}", file=sys.stderr, flush=True)
+            continue
         if current != thread or not eligible(current, root, role, mode, node):
             print(f"CHANGED {thread.relative}; deferred", flush=True)
             continue
@@ -195,6 +213,8 @@ def dispatch_pass(root: Path, role: str, cfg: dict, folder: Path,
                 after = read_thread(thread.path, root)
                 if after.status == "open" and after.owner == role and after.last_role != role:
                     reason = "runner exited without a role entry or handoff"
+        except MultipleOwners:
+            pass  # Handed off to several roles: no longer this role's assignment.
         except subprocess.TimeoutExpired:
             reason = "runner timed out"
         except (OSError, ValueError) as exc:
