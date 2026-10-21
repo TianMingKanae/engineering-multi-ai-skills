@@ -51,14 +51,21 @@ def seal(root, identity, spec):
     if type(timeout) is not int or timeout <= 0:
         raise ValueError("timeout_seconds must be positive")
     revision = git(root, "rev-parse", "HEAD").decode().strip()
-    files = {}
+    files, git_files = {}, {}
     paths = [spec["evaluator"], spec["contract"], *spec["tests"], *spec.get("extra_files", [])]
     for name in paths:
         path = local(root, name)
         committed = git(root, "show", f"{revision}:{name}")
-        if path.read_bytes() != committed:
+        working = path.read_bytes()
+        # Git checkouts may convert text line endings; freeze both identities.
+        text_suffixes = {".py", ".json", ".toml", ".yaml", ".yml", ".txt", ".md", ".lock", ".ini", ".cfg", ".in"}
+        equivalent = working == committed
+        if path.suffix.lower() in text_suffixes:
+            equivalent = working.replace(b"\r\n", b"\n") == committed.replace(b"\r\n", b"\n")
+        if not equivalent:
             raise ValueError(f"File is not identical to the committed revision: {name}")
         files[name] = sha(path)
+        git_files[name] = hashlib.sha256(committed).hexdigest()
     test = subprocess.run(command, cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace",
                           timeout=timeout, shell=False)
     if test.returncode:
@@ -67,7 +74,7 @@ def seal(root, identity, spec):
     if result.exists() or any(sha(local(root, name)) != value for name, value in files.items()):
         raise ValueError("Tests created registered data or changed a registered file")
     record = dict(id=identity, revision=revision, created=datetime.now(timezone.utc).isoformat(),
-                  files=files, spec=spec, test_exit=0,
+                  files=files, git_files=git_files, spec=spec, test_exit=0,
                   test_output_sha256=hashlib.sha256((test.stdout + test.stderr).encode()).hexdigest())
     receipt.parent.mkdir(parents=True, exist_ok=True)
     with receipt.open("x", encoding="utf-8") as f:
@@ -120,7 +127,7 @@ def evaluate(root, receipt_path, expected_receipt_sha):
             for name, expected in registration["files"].items():
                 path = local(root, name)
                 committed = git(root, "show", f"{registration['revision']}:{name}")
-                if sha(path) != expected or hashlib.sha256(committed).hexdigest() != expected:
+                if sha(path) != expected or hashlib.sha256(committed).hexdigest() != registration["git_files"][name]:
                     raise ValueError(f"Frozen file changed: {name}")
             result_path = local(root, spec["result"])
             record["result_sha256"] = sha(result_path)

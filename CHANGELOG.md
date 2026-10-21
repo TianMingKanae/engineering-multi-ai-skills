@@ -23,6 +23,7 @@ No unreleased changes.
 - README architecture now connects cross-provider roles, physical node tiers, frozen decision scripts, raw artifacts and independent CLAIMS review.
 - Governance/planning/claim procedures explicitly require pre-data decision-code tests, registered failures and independently isolated verifier packets.
 - VERSION, README release metadata, CLI version output and this release record advance together to 0.3.0.
+- Pre-registration records both Git-content and working-file hashes so ordinary Windows text checkout conversion is supported without allowing changes after sealing.
 
 ### Upgrade notes
 

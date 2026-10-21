@@ -15,6 +15,8 @@ python scripts/preregister.py seal --root . --id run-1 --spec examples/preregist
 
 Seal checks that declared files match the exact committed revision, runs the declared tests, then rechecks file hashes and result absence. A failed check creates no registration. It emits a receipt under context/registrations/ and its SHA-256. The evaluator/contract/tests may be reused by future **explicitly registered** runs, but each stable registration is consumed once.
 
+For known text formats, Git checkout CRLF/LF conversion is accepted at sealing; the receipt records both the committed Git-content hash and the actual working-file hash. Evaluation requires both original identities and rejects even a line-ending change after sealing. Binary declared files must match committed bytes exactly; arbitrary clean/smudge transformations are not accepted.
+
 3. Publish/commit the receipt and pin its hash in an authenticated pre-run approval or protected integration record before launch. The registered job must carry that anchor. A local timestamp/result-path absence alone cannot attest that no data was previously observed elsewhere.
 4. Produce the exact registered result using the approved job. The example expects a SQLite `metrics(name,value)` table. Optional adapters support scalar HDF5 `metrics/<name>`, classic MAT `metrics` structures and Parquet `name,value` rows; install only needed packages from requirements-optional.txt. These are declared metric schemas, not universal readers for arbitrary binary files.
 5. Evaluate using the **trusted pre-run** receipt hash:

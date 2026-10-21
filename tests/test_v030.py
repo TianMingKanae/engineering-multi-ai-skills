@@ -159,6 +159,17 @@ class RegistrationTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             registry.seal(self.root, "run-6", self.spec)
 
+    def test_git_checkout_line_endings_are_recorded_then_frozen(self):
+        for path in (self.root / "examples/preregistration").iterdir():
+            if path.suffix in {".py", ".json"}:
+                path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+        receipt, anchor = registry.seal(self.root, "run-7", self.spec)
+        record = json.loads(receipt.read_text())
+        name = self.spec["evaluator"]
+        self.assertNotEqual(record["files"][name], record["git_files"][name])
+        self.artifact(0)
+        self.assertTrue(registry.evaluate(self.root, receipt, anchor)["passed"])
+
 
 class LiteratureTest(unittest.TestCase):
     def metadata(self):
