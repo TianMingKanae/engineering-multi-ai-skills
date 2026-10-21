@@ -11,6 +11,12 @@ import subprocess
 import sys
 
 
+# Source formats whose Git checkout may convert line endings (e.g. core.autocrlf on Windows).
+TEXT_SUFFIXES = {".py", ".json", ".toml", ".yaml", ".yml", ".txt", ".md", ".lock", ".ini", ".cfg", ".in",
+                 ".m", ".r", ".jl", ".sh", ".ps1", ".bat", ".cmd", ".csv", ".tsv", ".sql",
+                 ".c", ".h", ".cpp", ".hpp", ".js", ".ts", ".xml", ".tex", ".bib"}
+
+
 def sha(path):
     h = hashlib.sha256()
     with Path(path).open("rb") as f:
@@ -58,9 +64,8 @@ def seal(root, identity, spec):
         committed = git(root, "show", f"{revision}:{name}")
         working = path.read_bytes()
         # Git checkouts may convert text line endings; freeze both identities.
-        text_suffixes = {".py", ".json", ".toml", ".yaml", ".yml", ".txt", ".md", ".lock", ".ini", ".cfg", ".in"}
         equivalent = working == committed
-        if path.suffix.lower() in text_suffixes:
+        if path.suffix.lower() in TEXT_SUFFIXES:
             equivalent = working.replace(b"\r\n", b"\n") == committed.replace(b"\r\n", b"\n")
         if not equivalent:
             raise ValueError(f"File is not identical to the committed revision: {name}")
@@ -115,6 +120,9 @@ def evaluate(root, receipt_path, expected_receipt_sha):
     identity, spec = registration["id"], registration["spec"]
     record = dict(id=identity, status="UNFINISHED", passed=None, receipt_sha256=expected_receipt_sha,
                   input_revision=registration["revision"], reason="evaluation reserved; unfinished is not a pass")
+    # A premature call (no result yet) must not consume the registration.
+    if not local(root, spec["result"]).is_file():
+        raise ValueError("Registered result does not exist yet; registration not consumed")
     conn = database(root)
     try:
         # Reserve and commit before running: crashes cannot permit an invisible second attempt.

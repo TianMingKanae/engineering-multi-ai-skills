@@ -4,13 +4,26 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-21
+
 ### Fixed
 
 - `dispatch.py` recognizes `### ROLE MM-DD HH:MM` entry headers as well as ISO timestamps, so a role that already wrote the last entry in that format is not dispatched again.
 - A thread with several owners (`owner: C, F`) is skipped with a warning instead of stopping dispatch for every thread, including when it changes during a pass; a runner that hands off to several owners counts as a handoff.
-- `rebalance.py --apply` now requires `--nodes` and checks the plan against that node snapshot, instead of trusting the topology stored in the plan file.
+- `preregister.py evaluate` called before the registered result file exists stops without consuming the registration; failures after reservation still finalize as NOT SHOWN.
+- Preregistration seal accepts Git checkout CRLF/LF conversion for more source formats, including MATLAB `.m`, R, Julia, shell/PowerShell, CSV/TSV, SQL, C/C++, JavaScript/TypeScript, XML and TeX/BibTeX.
 - An interrupted `preregister.py evaluate` is recorded as `UNFINISHED`, not `PROVISIONAL`, so it cannot read as supporting evidence in the generated ledger.
 - The preregistration line-ending regression test now writes the opposite of each committed Git blob's line endings, so both LF and CRLF source blobs exercise distinct working/Git hashes without changing text content.
+
+### Changed
+
+- `rebalance.py --apply` now requires `--nodes` and checks the plan against that node snapshot, instead of trusting the topology stored in the plan file.
+
+### Upgrade notes
+
+- **CLI change:** `rebalance.py --apply plan.json --state state.json` must now also pass `--nodes nodes.json`, the same node snapshot the plan was made from. A plan made from a different snapshot is rejected and the state is left unchanged.
+- Threads with `owner: C, F` are no longer dispatched to anyone; give each thread one owner to dispatch it.
+- Ledger readers should treat `UNFINISHED` as a distinct status: no verdict, not a pass. Earlier interrupted evaluations recorded as PROVISIONAL with reason "evaluation reserved" keep their stored record; review them through an audit, not by rewriting the row.
 
 ## [0.3.0]
 
@@ -74,7 +87,8 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 - Read-only task preview, bounded retries/timeouts, per-role local locks and 16 tool tests.
 - MIT License, Mermaid collaboration diagram and a three-minute quickstart with an intentionally failing practice task and four acceptance tests.
 
-[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.1.0
