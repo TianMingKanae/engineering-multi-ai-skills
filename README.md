@@ -1,31 +1,50 @@
 # engineering-multi-ai-skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version: 0.2.0](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.2.0)
+[![Version: 0.3.0](https://img.shields.io/badge/version-0.3.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.3.0)
 
-**v0.2.0 — Human gates, milestone routing and node-aware governance.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
+**v0.3.0 — Cross-provider collaboration, distributed tail planning and frozen evidence pipelines.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
 
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
 ```mermaid
-flowchart LR
-    H["Human Principal (H)"] -->|Scope and budget| O["Coordinator (O)"]
-    O --> P["Researcher (P)"]
-    P --> F["Code Owner (F)"]
-    O -->|Implementation| F
-    F --> W["Worker (W)"]
-    W -->|Completion event| O
-    O --> G{"Review milestone"}
-    G --> C["Critic (C)"]
-    C --> V["Verifier (V)"]
-    V -->|Evidence| O
-    O -->|Decision gate| H
-    O -.-> A["Auxiliary (A)"]
+flowchart TD
+    H["H: human scope and budget"] --> O["O: coordinator / Git and artifact manifests"]
+    subgraph Providers["Independently tested provider capabilities"]
+        B["Family A: builder O/F"]
+        V["Family B: critic C / blind verifier V"]
+        X["Family C: high-throughput extractor P/A"]
+    end
+    O --> B
+    O --> X
+    B --> R["Freeze decision code, contract and tests in Git"]
+    subgraph Nodes["Physical node capabilities and leases"]
+        N["Entitled network node / offline archive"]
+        W["High-core compute node"]
+        E["Edge worker / released tail units"]
+    end
+    X --> N
+    R --> W
+    R --> E
+    E -.->|Reviewed tail rescue| W
+    W --> D["Hashed binary results"]
+    E --> D
+    D --> G{"Frozen decision evaluator"}
+    G -->|Fail| F["NOT SHOWN: immutable verdict"]
+    G -->|Pass: provisional| V
+    N --> P["DOI identity / exact quote evidence"]
+    P --> V
+    V --> L["Independent CLAIMS gate and ledger"]
+    F --> O
+    L --> O
+    O -->|Scope or budget boundary| H
 ```
 
 Use one agent for ordinary work. Add separate implementers, reviewers or verifiers when independent work will resolve a concrete uncertainty. A skill does not create agents or grant permissions: use delegation and tool access already authorized in your environment.
 
 The diagram shows the optional **governed profile**: human decision gates, event-driven milestones, physical-node affinity and bounded worker repairs. The basic quickstart below uses I as a compatibility alias for F and needs no scheduler.
+
+Models, provider families and node labels are configurable capabilities, not vendor endorsements or proof of independence. The toolkit supplies reference planners and evidence tools; deployment still provides cross-host transport, access controls and a serialized lease/integration authority.
 
 ## 3-Minute Quickstart
 
@@ -89,6 +108,8 @@ For independent review, open a fresh assistant session and say: "Act as C. Read 
 | [worker-task](skills/worker-task/SKILL.md) | Execute a bounded assigned job, capture outputs and report reproducible failures. |
 | [claim-ledger](skills/claim-ledger/SKILL.md) | Keep engineering conclusions tied to evidence, status and limits. |
 | [engineering-governance](skills/engineering-governance/SKILL.md) | Apply H decision gates, milestone review, node migration, fix quotas and blind verification. |
+| [distributed-orchestration](skills/distributed-orchestration/SKILL.md) | Assign heterogeneous capabilities and plan safe capacity-bound tail rescue across nodes. |
+| [literature-provenance](skills/literature-provenance/SKILL.md) | Verify DOI/BibTeX identity, gate venues and locate exact offline evidence. |
 
 `skills/` holds the canonical copies. Copy selected folders into your agent's configured skill directory. For example, to install into a project's Claude skill directory:
 
@@ -128,6 +149,15 @@ These are responsibilities, not mandatory sessions. Combine roles when independe
 
 Read the [governance comparison and adoption guide](docs/governance.md) and the [four pattern modules](skills/engineering-governance/SKILL.md). H is the highest project authority within host constraints; a human waiver never changes the evidence. Token savings above 80% are a measurement target, not a demonstrated result of this repository.
 
+### v0.3.0 architecture modules
+
+- [Heterogeneous agents](docs/heterogeneous-agents.md): builder/reviewer/extractor capability contracts, cross-provider isolation and neutral file/Git IPC.
+- [Distributed topology](docs/distributed-topology.md): high-core/network/edge tiers, authorized offline archives, remaining-unit preservation and dynamic tail rescue.
+- [Pre-registration pipeline](docs/preregistration.md): committed evaluator/tests before registered data, protected receipt anchors and one-shot negative-result provenance.
+- [Literature toolchain](skills/literature-provenance/references/toolchain.md): registry-generated BibTeX, title matching, curated venue gates, offline corpus indexing and short exact quotes.
+
+Full waves use available slots when eligible independent work and memory allow. Partial tails, unequal runtimes and integration overhead remain visible; 100% utilization is not guaranteed. Venue reputation is a policy label, not validation of a claim.
+
 ### Example: duplicate webhook delivery
 
 1. O opens a thread: a repeated event must cause one database write. Assign I and define the test and owned files.
@@ -139,7 +169,7 @@ See [workflow.md](docs/workflow.md) for the thread contract and failure handling
 
 ## Optional execution tools
 
-Python 3.10+ and its standard library are sufficient. Tools accept `--root` and never configure credentials, synchronize Git, commit, push or change sandbox settings.
+Python 3.10+ and its standard library cover the core tools, SQLite example and text evidence. Optional HDF5/classic MAT/Parquet/PDF adapters use [requirements-optional.txt](requirements-optional.txt). Tools never configure credentials, synchronize Git, commit, push or change sandbox settings. Their project/path options are documented per command.
 
 ### Preview or dispatch assigned work
 
@@ -165,6 +195,15 @@ python scripts/run_task.py --root C:\path\to\project --id unit-tests -- python -
 
 The command runs without a shell. A log and JSON result under `.multi-ai/runs/` record timestamps, command, exit code and status. Optional `--timeout 600` bounds the direct command. Use your host's background-job facility if detachment is needed. Checkpointing and resumability belong to the command; the wrapper never assumes them or retries automatically.
 
+### Plan a tail batch or freeze a decision
+
+```shell
+python skills/distributed-orchestration/scripts/rebalance.py --state state.json --nodes nodes.json --out plan.json
+python scripts/preregister.py seal --root . --id run-1 --spec examples/preregistration/spec.json
+```
+
+Planning does not launch or migrate a live process. Review the [planner schemas/apply contract](skills/distributed-orchestration/references/scheduling.md) first. Registration requires committed code/tests and an absent registered result; pin the emitted receipt hash through a trusted pre-run approval before launch. The [complete evaluation workflow](docs/preregistration.md) writes a machine verdict ledger and blocks reuse of a consumed registration. These examples do not run experiments or acquire restricted literature automatically.
+
 ## Validation
 
 ```powershell
@@ -173,6 +212,8 @@ python -m unittest discover -s tests -v
 ```
 
 Tests use local subprocesses and temporary projects, with no paid model calls or external services.
+
+Optional adapter/PDF tests skip when their dependencies are absent. To exercise all adapters, install requirements-optional.txt into an isolated environment and rerun the same suite. Live DOI access is a separate explicit network operation; regression tests use synthetic registry responses.
 
 ## License
 

@@ -6,6 +6,34 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 No unreleased changes.
 
+## [0.3.0]
+
+### Added
+
+- `distributed-orchestration` skill and a deterministic capacity/memory/capability-aware planner for independent tail units, with read-only planning and explicit stale-state-checked apply.
+- Cross-provider capability and neutral IPC architecture documentation, physical high-core/network/edge topology, offline-archive rights records and safe straggler rescue procedures.
+- `preregister.py` to seal committed evaluator/contract/test files before named binary data exist, bind a trusted receipt hash and record one immutable machine verdict per registration.
+- Automatic NOT SHOWN accounting for failed criteria or evaluator integrity/errors, a SQLite claims ledger and regenerated Markdown projection; successful criteria remain PROVISIONAL pending independent verification.
+- `literature-provenance` skill with DOI content-negotiation/BibTeX identity checks, explicit venue tiers, exact short quote/page/heading location and rights-gated offline corpus indexing.
+- Optional scalar HDF5/classic MAT/Parquet metric adapters and PDF extraction, synthetic fixtures and regression tests.
+- Expanded NODES and new PREREGISTRATION templates with model/provider capability labels, pre-run anchors, unit inventories and amendment provenance.
+
+### Changed
+
+- README architecture now connects cross-provider roles, physical node tiers, frozen decision scripts, raw artifacts and independent CLAIMS review.
+- Governance/planning/claim procedures explicitly require pre-data decision-code tests, registered failures and independently isolated verifier packets.
+- VERSION, README release metadata, CLI version output and this release record advance together to 0.3.0.
+
+### Upgrade notes
+
+- Existing standard/milestone dispatcher routing remains available; new planners and preregistration tools are explicit opt-in commands, not background services.
+- Apply tail plans only after source quiescence and reviewed lease transfer. The local lock is not distributed consensus; serialize cross-clone state and ledger integration through an authorized authority.
+- Register evaluators only after committing their complete declared file inventory and running meaningful tests. Pin the receipt in a protected pre-run approval; local timestamps alone cannot prove data were unseen.
+- A negative/error consumes the registration and stays NOT SHOWN. An approved new attempt requires a new ID with a disclosed parent/reason, never silent reruns or overwritten failures.
+- Install only required optional binary/PDF adapters; core tools remain standard-library based. Optional tests explicitly skip without dependencies. Classic MAT support is schema-limited, not universal.
+- Configure venue policy locally and verify acquisition/redistribution rights. Preprint/unknown tiers are blocked by default; no venue label proves correctness. Quote page extraction and heading detection have explicit limitations.
+- No guarantee is made about vendor superiority, perfect utilization, savings percentages, adversary-proof storage or scientific validity from a machine criterion alone.
+
 ## [0.2.0]
 
 ### Added
@@ -39,6 +67,7 @@ No unreleased changes.
 - Read-only task preview, bounded retries/timeouts, per-role local locks and 16 tool tests.
 - MIT License, Mermaid collaboration diagram and a three-minute quickstart with an intentionally failing practice task and four acceptance tests.
 
-[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.1.0

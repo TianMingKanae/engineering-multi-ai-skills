@@ -1,0 +1,5 @@
+# Optional artifact/PDF adapters; core tools use the standard library.
+h5py>=3.8
+scipy>=1.10
+pyarrow>=14
+pypdf>=5

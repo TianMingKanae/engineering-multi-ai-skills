@@ -1,0 +1,8 @@
+{
+  "evaluator": "examples/preregistration/decision.py",
+  "contract": "examples/preregistration/contract.json",
+  "tests": ["examples/preregistration/test_decision.py"],
+  "result": ".multi-ai/results/registered.sqlite",
+  "test_command": ["python", "-m", "unittest", "discover", "-s", "examples/preregistration", "-v"],
+  "timeout_seconds": 60
+}

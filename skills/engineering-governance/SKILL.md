@@ -14,3 +14,5 @@ Read the reference relevant to the task rather than loading the whole suite:
 Use H/O/F/W/P/C/V/A for the governed profile. I is a compatibility alias for F in the basic walkthrough, not an extra writer. Preserve existing project roles unless the project adopts this profile. A skill does not start agents, enable watchers or expand permissions.
 
 Before declaring a governance improvement, show the observable evidence. Token-reduction percentages require matched workload measurements; a new protocol or successful launch is not a verified outcome.
+
+For cross-provider/physical-node execution, the optional distributed-orchestration skill supplies capability-based assignment and safe tail planning. For source evidence, literature-provenance supplies registry citation checks and exact offline quote location. These are complementary tools, not permission to acquire restricted sources or trust one provider's outputs. Registered runs must freeze executable criteria/tests before data and preserve failed verdicts; toolkit preregistration utilities require a protected anchor and serialized ledger authority.

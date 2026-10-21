@@ -1,0 +1,7 @@
+{
+  "venues": [
+    {"name": "Example Journal", "issn": ["synthetic-journal-id"], "type": "article-journal", "tier": "top-journal"},
+    {"name": "Example Conference", "type": "paper-conference", "tier": "flagship-conference"}
+  ],
+  "allowed_tiers": ["top-journal", "flagship-conference"]
+}

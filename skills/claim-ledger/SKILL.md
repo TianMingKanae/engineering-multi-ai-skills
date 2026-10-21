@@ -17,4 +17,6 @@ Distinguish "tests passed" from "safe in production", and "faster on workload X"
 
 H may override project direction or a procedural gate, but cannot change what the old evidence established. Keep human waivers separate from VERIFIED. Cross-node results need parity evidence or explicit environment limits. Do not claim token/cost reductions without a matched baseline and deduplicated measurements; an 80% reduction is a proposed target until measured.
 
+When using the toolkit's preregister.py, the machine source is context/CLAIMS.sqlite, projected to CLAIMS.generated.md. A consumed registration cannot be silently evaluated again, and finalized failures are not overwritten. Link its ID, protected receipt anchor, result hash and frozen evaluator revision from the curated ledger. Passed machine criteria remain PROVISIONAL. New approved runs disclose a parent/reason; use serialized integration rather than merging independently written databases. Role/provider diversity or a prestigious venue never substitutes for independent evidence.
+
 Update entries alongside evidence when practical. Do not silently overwrite a conclusion after new results; record the transition and reason. Reports may include new work outside the ledger if clearly identified as unverified. No edit is needed when evidence still supports the existing statement.
