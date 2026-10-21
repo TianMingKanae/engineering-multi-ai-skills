@@ -170,6 +170,31 @@ class RegistrationTest(unittest.TestCase):
         self.assertIn("| run-8 | UNFINISHED | None |", ledger)
         self.assertNotIn("PROVISIONAL", ledger)
 
+    def test_premature_evaluation_does_not_consume_registration(self):
+        receipt, anchor = registry.seal(self.root, "run-9", self.spec)
+        with self.assertRaises(ValueError):
+            registry.evaluate(self.root, receipt, anchor)
+        self.assertFalse((self.root / "context/CLAIMS.sqlite").exists())
+        self.artifact(0)
+        self.assertEqual("PROVISIONAL", registry.evaluate(self.root, receipt, anchor)["status"])
+
+    def test_matlab_source_line_endings_are_accepted_at_seal(self):
+        helper = self.root / "examples/preregistration/helper.m"
+        helper.write_bytes(b"function y = helper(x)\ny = x;\nend\n")
+        subprocess.run(["git", "-C", str(self.root), "add", "."], check=True, capture_output=True)
+        subprocess.run(["git", "-C", str(self.root), "commit", "-qm", "add helper"], check=True, capture_output=True)
+        helper.write_bytes(b"function y = helper(x)\r\ny = x;\r\nend\r\n")
+        self.spec["extra_files"] = ["examples/preregistration/helper.m"]
+        receipt, anchor = registry.seal(self.root, "run-10", self.spec)
+        record = json.loads(receipt.read_text())
+        self.assertNotEqual(record["files"]["examples/preregistration/helper.m"],
+                            record["git_files"]["examples/preregistration/helper.m"])
+        helper.write_bytes(b"function y = helper(x)\ny = x + 1;\nend\n")
+        self.artifact(0)
+        result = registry.evaluate(self.root, receipt, anchor)
+        self.assertEqual("NOT SHOWN", result["status"])
+        self.assertIn("Frozen file changed", result["reason"])
+
     def test_existing_result_or_uncommitted_contract_cannot_be_sealed(self):
         self.artifact(1)
         with self.assertRaises(ValueError):
