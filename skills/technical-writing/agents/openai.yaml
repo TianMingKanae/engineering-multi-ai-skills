@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Writing"
+  short_description: "Draft and revise evidence-backed papers and rebuttals"
+  default_prompt: "Plan or revise this technical document for its audience, preserving supported claims and the target publication style."

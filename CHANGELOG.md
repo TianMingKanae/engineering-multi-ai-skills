@@ -4,6 +4,12 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
+### Added
+
+- `technical-writing` skill with a reader/purpose/evidence workflow and eight focused references for papers, abstracts, captions, reviewer responses, reports, English mechanics and revision passes. General writing guidance acknowledges Markel (1994); examples are synthetic and no book or private context is distributed.
+- A read-only style checker with line-numbered suggestions and category filters. It handles common TeX math/bibliography exclusions, scans captions, accepts UTF-8 BOM input and reports malformed arguments or unreadable input without editing the source.
+- Regression tests for advisory output, category validation, TeX exclusions/captions, original line numbers, encoding errors and unchanged draft bytes.
+
 ## [0.4.0] - 2026-10-26
 
 ### Added

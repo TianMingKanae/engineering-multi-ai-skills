@@ -116,6 +116,7 @@ For independent review, open a fresh assistant session and say: "Act as C. Read 
 | [distributed-orchestration](skills/distributed-orchestration/SKILL.md) | Assign heterogeneous capabilities and plan safe capacity-bound tail rescue across nodes. |
 | [literature-provenance](skills/literature-provenance/SKILL.md) | Verify DOI/BibTeX identity, gate venues and locate exact offline evidence. |
 | [execution-integrity](skills/execution-integrity/SKILL.md) | Seal declared run bytes, separate preparation from execution and preserve attempt costs. |
+| [technical-writing](skills/technical-writing/SKILL.md) | Plan and revise evidence-backed papers, abstracts, captions and reviewer responses; includes a read-only style scanner. |
 
 `skills/` holds the canonical copies. Copy selected folders into your agent's configured skill directory. For example, to install into a project's Claude skill directory:
 
@@ -229,6 +230,8 @@ python -m unittest discover -s tests -v
 ```
 
 Tests use local subprocesses and temporary projects, with no paid model calls or external services.
+
+For manuscript work, use [technical-writing](skills/technical-writing/SKILL.md). Its references cover structure, revision passes, graphics, English mechanics and reviewer responses. The included `style_check.py` only suggests passages to reread; it never edits a draft or verifies a scientific claim. Publication and section-ownership rules remain those of the target project.
 
 Optional adapter/PDF tests skip when their dependencies are absent. To exercise all adapters, install requirements-optional.txt into an isolated environment and rerun the same suite. Live DOI access is a separate explicit network operation; regression tests use synthetic registry responses.
 
