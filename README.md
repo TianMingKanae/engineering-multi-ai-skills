@@ -1,9 +1,9 @@
 # engineering-multi-ai-skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version: 0.3.1](https://img.shields.io/badge/version-0.3.1-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.3.1)
+[![Version: 0.4.0](https://img.shields.io/badge/version-0.4.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.4.0)
 
-**v0.3.1 — Dispatcher thread-format compatibility, snapshot-checked plan apply and safer preregistration evaluation.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
+**v0.4.0 — Exact-byte execution packets, durable attempt budgets, lean delta review and verified monitoring chains.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
 
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
@@ -24,11 +24,16 @@ flowchart TD
         E["Edge worker / released tail units"]
     end
     X --> N
-    R --> W
-    R --> E
+    R --> Q["Preparation packet / target runtime checks"]
+    Q --> S{"Scoped execution release + reserved budget"}
+    S --> W
+    S --> E
     E -.->|Reviewed tail rescue| W
     W --> D["Hashed binary results"]
     E --> D
+    W -.-> A["Preserved failed attempts / actual costs"]
+    E -.-> A
+    A --> O
     D --> G{"Frozen decision evaluator"}
     G -->|Fail| F["NOT SHOWN: immutable verdict"]
     G -->|Pass: provisional| V
@@ -110,6 +115,7 @@ For independent review, open a fresh assistant session and say: "Act as C. Read 
 | [engineering-governance](skills/engineering-governance/SKILL.md) | Apply H decision gates, milestone review, node migration, fix quotas and blind verification. |
 | [distributed-orchestration](skills/distributed-orchestration/SKILL.md) | Assign heterogeneous capabilities and plan safe capacity-bound tail rescue across nodes. |
 | [literature-provenance](skills/literature-provenance/SKILL.md) | Verify DOI/BibTeX identity, gate venues and locate exact offline evidence. |
+| [execution-integrity](skills/execution-integrity/SKILL.md) | Seal declared run bytes, separate preparation from execution and preserve attempt costs. |
 
 `skills/` holds the canonical copies. Copy selected folders into your agent's configured skill directory. For example, to install into a project's Claude skill directory:
 
@@ -138,6 +144,8 @@ Review existing same-named skills before copying. Other hosts can use the same S
 
 These are responsibilities, not mandatory sessions. Combine roles when independence is unnecessary. In basic mode, O → P/F → C → V → O is one possible flow. In the governed profile, O batches C/V work at Pilot Readout, Pre-Main Launch and CLAIMS Entry; routine jobs do not trigger repeated reviews. Only O/F own production changes, with a narrow recorded W mechanical-fix exception. Use isolated clones/worktrees for concurrent writes; blind V needs a separate minimal artifact packet, not a source-visible worktree.
 
+The [optional lean profile](docs/lean-execution.md) lets a project explicitly assign bounded repairs more flexibly, continue ordinary authorized work without administrative handoffs and review only affected evidence. C/V may share responsibilities when still independent of the author; blindness requires a separate unexposed packet/session. Keep one effective provider per exclusive role and record actual takeover evidence.
+
 ### Governance patterns and before/after
 
 | Concern | Before | Governed profile |
@@ -157,6 +165,15 @@ Read the [governance comparison and adoption guide](docs/governance.md) and the 
 - [Literature toolchain](skills/literature-provenance/references/toolchain.md): registry-generated BibTeX, title matching, curated venue gates, offline corpus indexing and short exact quotes.
 
 Full waves use available slots when eligible independent work and memory allow. Partial tails, unequal runtimes and integration overhead remain visible; 100% utilization is not guaranteed. Venue reputation is a policy label, not validation of a claim.
+
+### v0.4.0 execution and recovery modules
+
+- [Exact-byte packets](skills/execution-integrity/references/packets.md): freeze a declared file inventory, protect its anchor and reject phase or byte mismatches. Preparation is not execution permission.
+- [Durable budgets](skills/execution-integrity/references/budgets.md): reserve before launch, retain pending/failed attempts, separate measured cost from policy debits and expose overruns.
+- [Lean execution](docs/lean-execution.md): one accountable implementer, affected-delta review and reuse of unchanged evidence, with explicit project adoption.
+- [Operational health](docs/operational-health.md): verify actual trigger → dispatch → task response → integration/delivery, including quota waits and exclusive provider replacement.
+
+Start with the synthetic packet example in the packet guide; it makes no model calls and launches no workload. New [execution](templates/project/context/EXECUTION.md), [roles](templates/project/context/ROLES.md) and [operations](templates/project/context/OPERATIONS.md) records support adoption. Budget helpers are local accounting references, not resource meters, authorizers or distributed leases. Existing dispatcher and preregistration behavior remains unchanged.
 
 ### Example: duplicate webhook delivery
 

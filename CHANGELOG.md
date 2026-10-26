@@ -4,6 +4,29 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-26
+
+### Added
+
+- `execution-integrity` skill for staged readiness, immutable run roots, exact-byte evidence transport and durable attempt accounting.
+- `packet.py` to seal declared project-local files and validate a protected manifest anchor, byte inventory and preparation/execution phase. Success means PACKET_INTACT, not execution permission or independent verification.
+- `budget.py` with frozen local budget policy, transactional reservations, total attempt limits, preserved pending/failed attempts, unique cost IDs and immutable evidenced settlements. Reports measured costs, policy debits, outstanding reservations and overruns separately.
+- Synthetic packet/cost examples and behavioral regression tests, including concurrent reservation admission, failed-cost carry, duplicate accounting rejection and byte/phase mismatch rejection.
+- Lean execution and operational-health guides; EXECUTION, ROLES and OPERATIONS project records for scoped delta review, exclusive provider transitions and actual event-to-delivery evidence.
+
+### Changed
+
+- Governance and worker guidance now distinguish conservative defaults from an explicitly adopted, bounded lean profile; ordinary authorized repairs need no administrative acknowledgment.
+- Claim and distributed-handoff guidance separates stored compatibility, source integrity, execution coverage and outcome quality. Merged reviewer/verifier responsibilities retain independence and exposure limits.
+- README architecture connects preparation packets, execution release and resource reservations; VERSION, release metadata and root CLI versions advance together.
+
+### Upgrade notes
+
+- Existing dispatcher, planner and preregistration CLIs remain unchanged. New tools are opt-in and do not start jobs, modify credentials or create automations. Operational health/cooldown records are deployment guidance, not a new provider adapter.
+- Adopt the lean profile explicitly in the target project's governance record before overriding conservative role/repair defaults. It never waives independent outcome checks or prospectively registered criteria.
+- Packet hashes are exact-byte identities, including encoding and line endings; configure transport before sealing and protect the emitted anchor externally. Only declared files are checked. Runtime/import resolution and snapshot immutability still need target-host controls.
+- Keep one authoritative budget ledger; never merge per-clone copies as fresh capacity. Reservations do not enforce process limits, settlement evidence is operator-supplied, and SQLite triggers are not a security boundary. Unknown crashed work stays reserved until evidenced settlement.
+
 ## [0.3.1] - 2026-10-21
 
 ### Fixed
@@ -87,7 +110,8 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 - Read-only task preview, bounded retries/timeouts, per-role local locks and 16 tool tests.
 - MIT License, Mermaid collaboration diagram and a three-minute quickstart with an intentionally failing practice task and four acceptance tests.
 
-[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.1.0...v0.2.0

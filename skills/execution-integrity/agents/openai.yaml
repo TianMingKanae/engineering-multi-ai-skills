@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execution Integrity"
+  short_description: "Pin run packets and preserve bounded attempt costs"
+  default_prompt: "Prepare an immutable execution packet and reconcile attempt costs within the assigned scope."

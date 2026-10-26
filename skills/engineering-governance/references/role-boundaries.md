@@ -17,6 +17,8 @@ Only O/F own production changes. I in the basic walkthrough is an alias for F's 
 
 ## Local self-fix quota
 
+These are conservative defaults, not a universal veto on assigned work. An explicitly adopted project profile may authorize another role to implement a bounded repair; record the scope, files, limits and reviewer before proceeding. The actor must not independently certify its own patch. Reuse unchanged evidence and review affected deltas rather than creating an administrative handoff per receipt. See [lean execution](lean-execution.md). Without that adopted authorization, the defaults below remain in force.
+
 Default worker budget: **one mechanical patch and one safe retry per stable task ID**, across wakes, fingerprints, nodes and migrations. O/F must explicitly set any different quota before work; W cannot replenish it by renaming a file or restarting. Record `fix_limit`, `fixes_used`, `retry_limit`, `retries_used`, owning node and review owner in the queue. Claim a repair allowance before editing using the project's shared task/lease mechanism. Parallel clones must not each spend the same allowance.
 
 A candidate mechanical repair may change paths, create a missing directory, correct launch wiring, adjust a process pool or restore initialization only when O/F's declared invariants show no computational semantics change. Check function resolution and versions. Duplicate module names, pool-dependent randomness, reduction order, runtime/solver selection, precision or fallback behavior make it **non-mechanical until proven otherwise**. Resource changes still need capacity checks. Never promise bitwise equality based on the category of change alone.

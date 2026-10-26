@@ -1,0 +1,7 @@
+{
+  "id": "task-17-preparation",
+  "phase": "preparation",
+  "files": ["settings.json", "task.txt"],
+  "checked": ["declared input inventory"],
+  "unchecked": ["target runtime", "execution permission", "outcome quality"]
+}

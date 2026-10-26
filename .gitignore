@@ -6,3 +6,6 @@
 __pycache__/
 .multi-ai/
 runner.local.json
+*.local.json
+*.local.sqlite
+*.local.sqlite-*

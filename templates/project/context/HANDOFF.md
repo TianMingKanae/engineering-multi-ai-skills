@@ -18,5 +18,9 @@ Use one record per handoff. All fields describe the authorized task; do not incl
 | Lease transferred | O confirms source release and target ownership |
 | Target STARTED | Same handoff ID plus new run ID and timestamp |
 | Failure / rollback decision | Inspect both nodes before any restart |
+| Ownership epoch / old provider stop | One active successor; standby is not active; preserve valid in-flight jobs |
+| Phase / checked and unchecked scope | Preparation and stored compatibility are not execution permission |
+| Budget authority / carried costs | Same ledger; failed and pending attempts survive transfer |
+| Required continuation/delivery | Actual task response and any required human notification, not just a PID |
 
 Keep accepted hashes consistent across READY, lease transfer and STARTED. If no portable checkpoint exists, plan an explicit new run. A local process lock does not provide a distributed lease or numerical parity evidence.

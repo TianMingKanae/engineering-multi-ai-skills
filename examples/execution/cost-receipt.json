@@ -1,0 +1,8 @@
+{
+  "attempt": "task-17-prep-1",
+  "cost_id": "synthetic-process-lifetime-1",
+  "status": "FAILED",
+  "charged": 7,
+  "basis": "measurement",
+  "evidence": "synthetic fixture; replace with the actual meter receipt and hash"
+}
