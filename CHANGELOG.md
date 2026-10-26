@@ -4,11 +4,23 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-26
+
 ### Added
 
 - `technical-writing` skill with a reader/purpose/evidence workflow and eight focused references for papers, abstracts, captions, reviewer responses, reports, English mechanics and revision passes. General writing guidance acknowledges Markel (1994); examples are synthetic and no book or private context is distributed.
 - A read-only style checker with line-numbered suggestions and category filters. It handles common TeX math/bibliography exclusions, scans captions, accepts UTF-8 BOM input and reports malformed arguments or unreadable input without editing the source.
 - Regression tests for advisory output, category validation, TeX exclusions/captions, original line numbers, encoding errors and unchanged draft bytes.
+
+### Changed
+
+- README skill discovery now includes technical writing; VERSION, README release metadata and root CLI versions advance together to 0.5.0. The toolkit now provides ten skills.
+
+### Upgrade notes
+
+- Existing execution, dispatch, planning and preregistration CLI contracts are unchanged. Copy the optional `technical-writing` folder to the target host's configured skill directory to adopt it; no additional package is required for its style scanner.
+- Run the scanner relative to that skill directory or use its full script path. Suggestions are advisory: a successful scan exits zero even when flags are present, never edits a draft and does not verify claims or citations. It is not a full Markdown/LaTeX parser.
+- Keep the target publication's layout, existing section ownership and evidence/review requirements. Adopting the skill does not authorize sending or submitting a manuscript. No book PDF, private project context or research results are included.
 
 ## [0.4.0] - 2026-10-26
 
@@ -116,7 +128,8 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 - Read-only task preview, bounded retries/timeouts, per-role local locks and 16 tool tests.
 - MIT License, Mermaid collaboration diagram and a three-minute quickstart with an intentionally failing practice task and four acceptance tests.
 
-[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/TianMingKanae/engineering-multi-ai-skills/compare/v0.2.0...v0.3.0

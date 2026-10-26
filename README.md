@@ -1,9 +1,9 @@
 # engineering-multi-ai-skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version: 0.4.0](https://img.shields.io/badge/version-0.4.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.4.0)
+[![Version: 0.5.0](https://img.shields.io/badge/version-0.5.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.5.0)
 
-**v0.4.0 — Exact-byte execution packets, durable attempt budgets, lean delta review and verified monitoring chains.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
+**v0.5.0 — Evidence-backed technical writing, manuscript revision guides and a read-only style checker.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
 
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
