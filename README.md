@@ -1,9 +1,9 @@
 # engineering-multi-ai-skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version: 0.5.0](https://img.shields.io/badge/version-0.5.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.5.0)
+[![Version: 0.6.0](https://img.shields.io/badge/version-0.6.0-blue.svg)](https://github.com/TianMingKanae/engineering-multi-ai-skills/releases/tag/v0.6.0)
 
-**v0.5.0 — Evidence-backed technical writing, manuscript revision guides and a read-only style checker.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
+**v0.6.0 — Iterative multi-direction research harness with isolated briefings, dual verification and verified intermediate ledgers.** See the [changelog and upgrade notes](CHANGELOG.md). Maintainers: [versioning and release checklist](docs/releases.md).
 
 Practical skills and a file-based workflow for engineering teams using multiple AI agents. Works with software, infrastructure, data pipelines, benchmarks and other engineering tasks. No model, vendor, machine or programming language is required.
 
@@ -116,6 +116,7 @@ For independent review, open a fresh assistant session and say: "Act as C. Read 
 | [distributed-orchestration](skills/distributed-orchestration/SKILL.md) | Assign heterogeneous capabilities and plan safe capacity-bound tail rescue across nodes. |
 | [literature-provenance](skills/literature-provenance/SKILL.md) | Verify DOI/BibTeX identity, gate venues and locate exact offline evidence. |
 | [execution-integrity](skills/execution-integrity/SKILL.md) | Seal declared run bytes, separate preparation from execution and preserve attempt costs. |
+| [research-harness](skills/research-harness/SKILL.md) | Run multi-direction discovery loops with isolated briefings, dual review, intermediate ledgers and standing rules. |
 | [technical-writing](skills/technical-writing/SKILL.md) | Plan and revise evidence-backed papers, abstracts, captions and reviewer responses; includes a read-only style scanner. |
 
 `skills/` holds the canonical copies. Copy selected folders into your agent's configured skill directory. For example, to install into a project's Claude skill directory:
@@ -175,6 +176,15 @@ Full waves use available slots when eligible independent work and memory allow. 
 - [Operational health](docs/operational-health.md): verify actual trigger → dispatch → task response → integration/delivery, including quota waits and exclusive provider replacement.
 
 Start with the synthetic packet example in the packet guide; it makes no model calls and launches no workload. New [execution](templates/project/context/EXECUTION.md), [roles](templates/project/context/ROLES.md) and [operations](templates/project/context/OPERATIONS.md) records support adoption. Budget helpers are local accounting references, not resource meters, authorizers or distributed leases. Existing dispatcher and preregistration behavior remains unchanged.
+
+### Iterative research harness
+
+For open-ended discovery or puzzling experimental mismatches, see [research-harness.md](docs/research-harness.md):
+
+- Isolated per-direction briefings and round-by-round [ATTEMPTS.md](templates/project/context/ATTEMPTS.md) logs (preserving failing objections and triggering mid-run literature lookup when stalled).
+- Dual-scope verification (per-attempt single audit plus round-wide side-by-side cross-check for shared blind spots).
+- Separate [LEDGER.md](templates/project/context/LEDGER.md) for isolated-verified intermediate fragments and excluded dead ends, plus [STANDING_INSTRUCTIONS.md](templates/project/context/STANDING_INSTRUCTIONS.md) maintained by a cross-round process advisor.
+- Standard-library state/briefing helper [harness_ledger.py](skills/research-harness/scripts/harness_ledger.py).
 
 ### Example: duplicate webhook delivery
 

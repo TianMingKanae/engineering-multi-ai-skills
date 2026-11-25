@@ -4,6 +4,23 @@ User-facing changes are recorded here by release. `VERSION` is the current toolk
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-25
+
+### Added
+
+- `research-harness` skill with isolated per-direction briefings, dual-scope adversarial verification (`single` + round-wide `cross`), verified intermediate fragment salvage, excluded dead-end tracking and cross-round process advisor guardrails.
+- Zero-dependency `harness_ledger.py` helper enforcing non-self-verified fragment promotion, dual-verifier pass gates, mandatory failure objections, stall detection (`>= 2` failures) and direction-scoped briefings.
+- Architecture guide `docs/research-harness.md`, starter templates `ATTEMPTS.md`, `LEDGER.md`, `STANDING_INSTRUCTIONS.md` and regression suite `tests/test_research_harness.py`.
+
+### Changed
+
+- README skill discovery and architecture overview now include `research-harness`; starter `CLAIMS.md` notes separation between intermediate `LEDGER.md` / `ATTEMPTS.md` records and top-level conclusions. VERSION, README release metadata and root CLI versions advance together to 0.6.0 (now 11 skills).
+
+### Upgrade notes
+
+- Existing dispatcher, runner, governance, planner, preregistration, execution-integrity and technical-writing CLI contracts are unchanged. Copy the optional `research-harness` folder to your target project or host skill directory to adopt it; `harness_ledger.py` uses Python 3.10+ standard library only.
+- Keep `context/LEDGER.md` and `context/ATTEMPTS.md` for exploratory building blocks and excluded dead ends; continue keeping top-level verified project conclusions in `context/CLAIMS.md`. Dual verification and isolated fragment promotion never substitute for prospectively registered evaluation or independent raw-artifact checks.
+
 ## [0.5.0] - 2026-10-26
 
 ### Added

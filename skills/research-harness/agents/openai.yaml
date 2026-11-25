@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Harness"
+  short_description: "Run multi-direction discovery with dual review and verified ledgers"
+  default_prompt: "Coordinate an iterative research round with isolated briefings, dual adversarial verification, a verified intermediate ledger and standing instructions."
